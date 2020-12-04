@@ -1,0 +1,35 @@
+version: "2.3"
+services:
+  postgres-db:
+    image: postgres:12
+    mem_limit: 2048MB
+    mem_reservation: 1G 
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+    - 5555:5432
+    networks:
+    - pg_pgadmin_network
+    volumes:
+    - db-vol:/var/lib/postgresql/data
+    env_file:
+    - .env
+  pgadmin4-demo:
+    image: dpage/pgadmin4
+    mem_limit: 2048MB
+    mem_reservation: 1G
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+    - 7777:80
+    networks:
+    - pg_pgadmin_network
+    env_file:
+    - .env
+networks:
+ pg_pgadmin_network:
+   driver: bridge
+volumes:
+  db-vol:

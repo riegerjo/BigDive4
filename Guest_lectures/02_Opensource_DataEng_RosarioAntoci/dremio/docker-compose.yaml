@@ -1,0 +1,24 @@
+version: "3"       
+
+networks:
+  web:
+    external: true 
+  internal:        
+    external: false
+
+services:
+  dremio:
+    image: dremio/dremio-oss:latest
+    container_name: bd-dremio
+    labels:
+      - traefik.http.routers.dremio.rule=Host(`bd-dremio.ldto.it`)
+      - traefik.http.routers.dremio.tls=true
+      - traefik.http.routers.dremio.tls.certresolver=lets-encrypt
+      - traefik.port=9047
+    networks:
+      - internal
+      - web
+    ports:
+      - "9047:9047"
+      - "31010:31010"
+      - "45678:45678"
